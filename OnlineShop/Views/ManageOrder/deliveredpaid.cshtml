@@ -1,0 +1,43 @@
+﻿@using OnlineShop.Models;
+@model IEnumerable<Order>
+@{
+    ViewBag.Title = "Order Management";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10);
+}
+
+<div class="card">
+    <div class="card-body">
+        <h2>Order Management (Paid & Delivered)</h2>
+        <br />
+        <ul class="nav nav-pills nav-justified">
+            <li class="nav-item"><a class="nav-link" href="@Url.Action("Unpaid","ManageOrder")">Unpaid</a></li>
+            <li class="nav-item"><a class="nav-link" href="@Url.Action("notdelivery","ManageOrder")">NOT DELIVERY & PAYED</a></li>
+            <li class="nav-item"><a class="nav-link active" href="@Url.Action("deliveredpaid","ManageOrder")">DELIVERY AND PAYMENT</a></li>
+        </ul>
+        <br />
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                      tableStyle: "table table-bordered table-hover",
+                      headerStyle: "",
+                      footerStyle: "text-center",
+                      numericLinksCount: 10,
+                      mode: WebGridPagerModes.All, firstText: "First Page", lastText: "Laste page",
+                      columns: grid.Columns(
+                          grid.Column("OrderID", "OrderID"),
+                          grid.Column("CustomerID", "CustomerID", format: p => p.CustomerID != null ? p.Customer.CustomerName : ""),
+                          grid.Column("OrderDate", "OrderDate"),
+                          grid.Column("Deliverystatus", "Deliverystatus"),
+                          grid.Column("Deliverydate", "Deliverydate"),
+                          grid.Column("Paid", "Paid"),
+                          grid.Column("Endow", "Endow"),
+                          grid.Column("Cancelled", "Cancelled"),
+                          grid.Column(format: p => Html.ActionLink("Browse orders", "BrowseOrders", new { id = p.OrderID }, new { @target = "_blank" }))
+                          )
+                      )
+            </div>
+        }
+    </div>
+</div>

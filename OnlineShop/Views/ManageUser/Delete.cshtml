@@ -1,0 +1,65 @@
+﻿@model OnlineShop.Models.User
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h4>@Html.ActionLink("ManageUser", "Index") > Delete</h4>
+<div class="card shadow">
+    <div class="card-body">
+        <h4 class="card-title">User information</h4>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.IDUser)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.IDUser)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.UserName)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.UserName)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Password)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Password)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.FullName)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.FullName)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Address)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Address)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Email)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Email)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.PhoneNumber)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.PhoneNumber)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Question)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Question)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Answer)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Answer)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.IDUsertype)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.IDUsertype)</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-sm btn-primary font-weight-bold w-25" />
+                    @Html.ActionLink("Return", "Index", null, htmlAttributes: new { @class = "btn btn-sm btn-secondary font-weight-bold w-25" })
+                }
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,81 @@
+﻿@using OnlineShop.Models
+@model UserType
+@{
+    ViewBag.Title = "User Authorization";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h4>@Html.ActionLink("User Authorization", "Index") > Authorization</h4>
+<div class="card">
+    <div class="card-body">
+        <h2>User Type: @Model.UsertypeName</h2>
+        @{
+            IEnumerable<Role> lstRole = (IEnumerable<Role>)ViewBag.RoleID;
+            IEnumerable<UserType_Role> lstusertyperole = (IEnumerable<UserType_Role>)ViewBag.UserType_Role;
+        }
+        @using (Html.BeginForm())
+        {
+            @Html.Hidden("IDUsertype", Model.IDUsertype)
+            if (lstusertyperole != null)
+            {
+                for (int j = 0; j < lstRole.Count(); j++)
+                {
+                    int k = 0;  //tạo biến k làm biến đếm để duyệt vòng lặp của bảng quyền xem nếu loại tv nào có mã quyền ứng vs quyền
+                    for (int i = 0; i < lstusertyperole.Count(); i++)
+                    {   //ss giữa item trong bảng quyen và item trong bảng loaitvquyen vs MaQuyen
+                        if (lstRole.ElementAt(j).RoleID == lstusertyperole.ElementAt(i).RoleID)
+                        {
+                            k++;
+                            break;
+                        }
+                    }
+                    if (k != 0)
+                    {
+                        <div class="col-md-4" style="font-size:15pt;">
+                            <input class="ckb_Click" checked="checked" type="checkbox" style="height:1em; width:1em;" name="@Url.Content("["+j+"].RoleID")" value="@lstRole.ElementAt(j).RoleID"/>
+                            @lstRole.ElementAt(j).RoleID
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4" style="font-size:15pt;">
+                            <input class="ckb_Click" type="checkbox" style="height:1em; width:1em;" name="@Url.Content("["+j+"].RoleID")" value="@lstRole.ElementAt(j).RoleID" />
+                            @lstRole.ElementAt(j).RoleName
+                        </div>
+                    }
+                    k = 0;
+                }
+            }
+            else
+            {   //đối vs loại tv chưa phân quyền
+                for (int i = 0; i < lstRole.Count(); i++)
+                {
+                    <div class="col-md-4" style="font-size:12pt;">
+                        <input type="hidden" value="@Model.IDUsertype" name="@Url.Content("["+i+"].IDUsertype")" />
+                        <input class="ckb_Click" type="checkbox" style="height:1em; width:1em;" name="@Url.Content("["+i+"].RoleID")" value="@lstRole.ElementAt(i).RoleID" />
+                        @lstRole.ElementAt(i).RoleName
+                    </div>
+                }
+            }
+            <div class="form-group row mt-3">
+                <div class="col-sm-4">
+                    <input type="submit" value="Decentralization" class="btn btn-sm btn-primary font-weight-bold w-25" />
+                    @Html.ActionLink("Return", "Index", null, htmlAttributes: new { @class = "btn btn-sm btn-secondary font-weight-bold w-25" })
+                </div>
+            </div>
+        }
+    </div>
+</div>
+@* Hàm jquery duyệt lại checkbox đã đc check *@
+<script>
+    $(".ckb_Click").click(function () {
+        i = 0;
+        $(".ckb_Click").each(function () {
+            if ($(this).is(':checked'))
+            {
+                $(this).attr("name", "[" + i + "].RoleID");
+                i++
+            }
+        })
+    })
+</script>

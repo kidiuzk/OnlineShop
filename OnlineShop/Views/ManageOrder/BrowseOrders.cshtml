@@ -1,0 +1,80 @@
+﻿@using OnlineShop.Models
+@model Order
+@{
+    ViewBag.Title = "BrowseOrders";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <h2 class="col-md-8">Order information @Model.Customer.CustomerName</h2>
+        @using (Html.BeginForm())
+        {
+            <div class="OrderDetail table">
+                @{IEnumerable<OrderDetail> lstOrderDetail = (IEnumerable<OrderDetail>)ViewBag.listOrderDetail; }
+                <table class="table table-bordered" id="table">
+                    @* Thông tin đơn hàng *@
+                    <tr>
+                        <td colspan="4">
+                            <table style="100%" class="table-borderless">
+                                <tr>
+                                    <td>OrderID: <b>@Model.OrderID @Html.Hidden("OrderID", Model.OrderID)</b></td>
+                                    <td>OrderID: <b>@Model.Customer.CustomerID </b></td>
+                                    <td>OrderID: <b>@Model.Customer.CustomerName </b></td>
+                                    <td>OrderDate: <b>@Model.OrderDate.Value.ToString("dd/MM/yyyy")</b></td>
+                                    <td>Paid: @Html.EditorFor(model => model.Paid)</td>
+                                    <td>Deliverystatus: @Html.EditorFor(model => model.Deliverystatus)</td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    @* Thông tin chi tiết đơn hàng *@
+                    <tr>
+                        <td><b>Product</b></td>
+                        <td><b>Image</b></td>
+                        <td><b>Order Quantity</b></td>
+                        <td><b>Set price</b></td>
+                    </tr>
+                    @foreach (var item in lstOrderDetail)
+                    {
+                        <tr>
+                            <td>@item.Product.ProductName</td>
+                            <td><img width="300" height="300" src="@Url.Content("~/Content/Img/"+item.Product.Img)" /></td>
+                            <td>@item.Amount</td>
+                            <td>@item.Price.Value.ToString("#,##")</td>
+                        </tr>
+                    }
+                    <tr>
+                        <td align="right" colspan="4">
+                            <span class="mr-5">Total: @Model.OrderDetails.Sum(n => n.Amount) Product</span>
+                            <span>Total amount: @Model.OrderDetails.Sum(n => n.Product.Price).Value.ToString("#,##") VNĐ</span>
+                        </td>
+                    </tr>
+
+                </table>
+            </div>
+            <div class="form-group row">
+                <div class="col-md-offset-2 col-sm-6">
+                    <input type="button" value="Order printing" class="btn btn-sm btn-success font-weight-bold" id="btnPrintOrder" />
+                    <input type="submit" value="Save order" class="btn btn-sm btn-primary font-weight-bold " id="btnPrintOrder" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<script>
+    $('#btnPrintOrder').click(function () {
+        var content = "<table>" + $("#table").html() + "</table>";
+        PrintOrder(content);
+    });
+
+    function PrintOrder(content) {
+        var printWindow = window.open('', '', 'height=50%,width=100%');
+        printWindow.document.write('<html><head><title>DIV contents</title>');
+        printWindow.document.write('</head><body>');
+        printWindow.document.write(content);
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.print();
+    }
+</script>

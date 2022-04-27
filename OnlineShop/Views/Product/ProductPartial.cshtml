@@ -1,0 +1,27 @@
+﻿@using OnlineShop.Models;
+@model IEnumerable<Product>
+
+<div class="content-top">
+    <h1>
+        Laptop New
+    </h1>
+    <div class="grid-in">
+        @foreach (var item in Model.Take(3)) //lấy ra 3 sp
+        {
+            <div class="col-md-4 grid-top">
+                <a href="@Url.RouteUrl("ProductDetail",new {@id=item.ProductID, @nameproduct = item.ProductName })" class="b-link-stripe b-animate-go  thickbox">
+                    <img class="img-responsive" src="@Url.Content("~/Content/Img/"+item.Img)" style="height: 390px; width:519px;" alt="">
+                    <div class="b-wrapper">
+                        <h4 class="b-animate b-from-left    b-delay03 " style="text-align:left;font-size:13pt; font-weight:normal;padding:1em">
+                            @Html.Raw(item.Configuration)
+                        </h4>
+                    </div>
+                </a>
+
+                <p class="nameSP"><a href="@Url.RouteUrl("ProductDetail",new {@id=item.ProductID, @nameproduct = item.ProductName })">@item.ProductName</a></p>
+            </div>
+        }
+        <div class="clearfix"> </div>
+    </div>
+
+</div>

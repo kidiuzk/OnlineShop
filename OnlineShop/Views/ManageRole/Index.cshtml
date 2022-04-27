@@ -1,0 +1,36 @@
+﻿@using OnlineShop.Models
+@model IEnumerable<Role>
+@{
+    ViewBag.Title = "Permissions Management";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10);
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        <p>
+            @Html.ActionLink("Add new", "Create", null, htmlAttributes: new { @class = "btn btn-sm btn-warning font-weight-bold " })
+        </p>
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                headerStyle: "",
+                footerStyle: "text-center",
+                numericLinksCount: 10,
+                mode: WebGridPagerModes.All, firstText: "First page", lastText: "Last page",
+                columns: grid.Columns(
+                    grid.Column("RoleID", "RoleID"),
+                    grid.Column("RoleName", "RoleName"),
+                    grid.Column(format: p => Html.ActionLink("Edit", "Edit", new { id = p.RoleID })),
+                    grid.Column(format: p => Html.ActionLink("Delete", "Delete", new { id = p.RoleID }))
+                    )
+                )
+            </div>
+        }
+    </div>
+</div>
+

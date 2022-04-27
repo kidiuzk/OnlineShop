@@ -1,0 +1,183 @@
+﻿@using OnlineShop.Models
+@model Receipt
+@{
+    ViewBag.Title = "Manage entry form";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+    IEnumerable<Manufacture> lstManufacture = (IEnumerable<Manufacture>)ViewBag.ManufactureID;
+}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="/resources/demos/style.css">
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script>
+    //script cho datepicker
+    $(function () {
+        $(".datepicker").datepicker();
+    });
+</script>
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        @using (Html.BeginForm())
+        {
+            <div class="form-group row pb-2">
+                <div class=" col-md-6">
+                    <label class="col-form-label font-weight-bold ">Manufacture</label>
+                    <select class="ManufactureID form-control" name="ManufactureID">
+                        @foreach (var item in lstManufacture)
+                        {
+                            <option value="@item.ManufactureID">@item.ManufactureName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="col-form-label font-weight-bold ">Import date</label>
+                    <input type="text" class="datepicker form-control" value="@ViewBag.ReceiptDate" />
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            @*Phần chi tiết nhập hàng *@
+            <table class="tblReceiptDetail table  table-hover">
+                @{IEnumerable<Product> lstProduct = ViewBag.ListProduct as IEnumerable<Product>; }
+                @* tạo 1 tr với nd nhập hàng của 1 sp *@
+
+                <tr class="trAppend table-borderless">
+                    <td>
+                        <select class="ddlProduct" name="">
+                            @foreach (var item in lstProduct)
+                            {
+                                <option value="@item.ProductID"> @item.ProductName</option>
+                            }
+                        </select>
+                    </td>
+                    <td>
+                        <input name="" class="txtPrice" value="0" />
+                    </td>
+                    <td>
+                        <input name="" class="txtNumber" value="0" />
+                    </td>
+                    <td>
+                        <input type="button" class="btnDelete btn btn-danger" style="width: 2em; height:2em;" value="-" />
+                    </td>
+                </tr>
+                <tr class="trFirstChild" data-id="-1">
+                    <td class="col-form-label font-weight-bold">Product</td>
+                    <td class="col-form-label font-weight-bold">Import price</td>
+                    <td class="col-form-label font-weight-bold">Number of imported products</td>
+                    <td></td>
+                </tr>
+            </table>
+            <div class="form-group row">
+                <div class="col-md-offset-2 col-sm-6">
+                    <input type="button" value="+" class="btn btn-sm btn-success font-weight-bold mr-2" style="width: 3em; height:2em;" id="btnAdd" />
+                    <input type="submit" value="Import goods" class="btn btn-sm btn-primary font-weight-bold " id="btnNhapHang" />
+                </div>
+            </div>
+        }
+    </div>
+</div>
+<style>
+    .trAppend {
+        display: none;
+    }
+</style>
+<script>
+    //xử lý sk thêm
+    $('#btnAdd').click(function () {
+        //Lấy id của tr cuối cùng thuộc thẻ table có class = tblReceiptDetail
+        var lastid = $(".tblReceiptDetail").find("tr:last-child").attr("data-id");
+        i = parseInt(lastid) + 1;
+
+        var tdcontent = $(".trAppend").html();  //Lấy nội dung phía trong thẻ append
+        var trcontent = "<tr class=\"trAppended\" data-id=\"" + i + "\">" + tdcontent + "<\tr>"; //Tạo thẻ tr bao ngoài nd
+        $(".tblReceiptDetail").append(trcontent);    //Lấy thẻ table append vào 1 tr
+        UploadID();
+    });
+    //xử lý xóa
+    $("body").delegate(".btnDelete", "click", function () {
+        $(this).closest(".trAppended").remove();
+        UpdateID();
+    });
+
+    //krta
+    $("#btnReceiptGoods").click(function () {
+        if (checkentryprice() == false)
+        {
+            //nếu tồn tại 1 gtri bất kì class dongia kp số thì ko cho submit về server
+            return false;
+        }
+
+        if (checkinputquantity() == false) {
+            //nếu tồn tại 1 gtri bất kì class dongia kp số thì ko cho submit về server
+            return false;
+        }
+    });
+
+    //xử lý lấy thuộc tính attr từ thẻ tr gán xuống chỉ số phần tử trong thuộc tính name của thẻ input
+    function UploadID() {
+        $(".trAppended").each(function () {
+            var id = $(this).attr("data-id");   //Lấy thuộc tính data-id của thẻ tr hiện tại
+            var nameProductID = "[" + id + "].ProductID";    //tạo ra masp
+            var NameImportPrice = "[" + id + "].ImportPrice";     //tạo dongia nhap
+            var nameImportNumber = "[" + id + "].ImportNumber";   //tạo ra solg nhap
+
+            $(this).find(".ddlProduct").attr("name", nameProductID);    //gán name cho dropdownlist
+            $(this).find(".txtPrice").attr("name", NameImportPrice);    //gán name cho dongia nhap
+            $(this).find(".txtNumber").attr("name", nameImportNumber);  //gán name cho solg nhap
+
+        })
+    };
+
+    function UpdateID() {
+
+        //Lấy lại tr1
+        var lastid = $(".tblReceiptDetail").find("trFirstChild").attr("data-id");
+        i = parseInt(lastid) + 1;
+
+        $(".trAppended").each(function () {
+            var id = i;
+            $(this).attr("data-id", i);
+            //update lại id khi xóa
+            var nameProductID = "[" + id + "].ProductID";    //tạo ra masp
+            var NameImportPrice = "[" + id + "].ImportPrice";     //tạo dongia nhap
+            var nameImportNumber = "[" + id + "].ImportNumber";   //tạo ra solg nhap
+
+            $(this).find(".ddlProduct").attr("name", nameProductID);    //gán name cho dropdownlist
+            $(this).find(".txtPrice").attr("name", NameImportPrice);    //gán name cho dongia nhap
+            $(this).find(".txtNumber").attr("name", nameImportNumber);  //gán name cho solg nhap
+        });
+    }
+
+    function checkentryprice() {
+
+        var bl = true;
+        //duyệt vòng lặp each
+        $(".txtPrice").each(function () {
+            var value = $(this).val();
+            if (isNaN(value) == true) {
+                alert("Invalid price!");
+                bl = false;
+                return bl;
+            }
+        });
+        return bl;
+    }
+
+    function checkinputquantity() {
+
+        var bl = true;
+        //duyệt vòng lặp each
+        $(".txtNumber").each(function () {
+            var value = $(this).val();
+            if (isNaN(value) == true) {
+                alert("Invalid number!");
+                bl = false;
+                return bl;
+            }
+        });
+        return bl;
+    }
+
+</script>

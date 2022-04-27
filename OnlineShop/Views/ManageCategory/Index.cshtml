@@ -1,0 +1,38 @@
+﻿@using OnlineShop.Models
+@model IEnumerable<Category>
+@{
+    ViewBag.Title = "Manage Category";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10);
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        <p>
+            @Html.ActionLink("Create", "Create", null, htmlAttributes: new { @class = "btn btn-sm btn-warning font-weight-bold " })
+        </p>
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                headerStyle: "",
+                footerStyle: "text-center",
+                numericLinksCount: 10,
+                mode: WebGridPagerModes.All, firstText: "First page", lastText: "Last page",
+                columns: grid.Columns(
+                    grid.Column("CategoryID", "Product type code"),
+                    grid.Column("CategoryName", "Product type name"),
+                    grid.Column("Icon", "Icon"),
+                    grid.Column("Alias", "Aliases"),
+                    grid.Column(format: p => Html.ActionLink("Edit", "Edit", new { id = p.CategoryID })),
+                    grid.Column(format: p => Html.ActionLink("Delete", "Delete", new { id = p.CategoryID }))
+                    )
+                )
+            </div>
+        }
+    </div>
+</div>
+

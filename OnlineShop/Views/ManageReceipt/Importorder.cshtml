@@ -1,0 +1,53 @@
+﻿@model OnlineShop.Models.Product
+@{
+    ViewBag.Title = "Products are almost out of stock";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="imgSP">
+                    <img src="@Url.Content("~/Content/Img/"+Model.Img)" style="height:150px;width:150px;" />
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="ttSP">
+                    <h3>Product: @Model.ProductName</h3>
+                    <h3>Producer: @Model.Producer.ProducerName</h3>
+                    <h3>Category: @Model.Category.CategoryName</h3>
+                    <h3>Quantity: @Model.Quantity</h3>
+                </div>
+            </div>
+        </div>
+        <br />
+        <hr />
+        <h3>Import information</h3>
+        <br />
+        @using (Html.BeginForm("Importorder", "ManageReceipt"))
+        {
+            @Html.Hidden("ProductID", Model.ProductID)
+            <div class="row">
+                <div class="col-md-4">
+                    @{var lstManufacture = (SelectList)ViewBag.ManufactureID;}
+                    Manufacture: @Html.DropDownList("ManufactureID", lstManufacture, new { @class = "ManufactureID" })
+                </div>
+                <div class="col-md-4">
+                    ImportNumber: @Html.TextBox("ImportNumber")
+                </div>
+                <div class="col-md-4">
+                    ImportPrice: @Html.TextBox("ImportPrice")
+                </div>
+                <div class="col-md-4">
+                </div>
+            </div>
+            <div class="clear right mr-3" style="text-align:right;">
+                <br />
+                <input type="submit" class="btn btn-primary mr-2" value="Import goods" />
+                @Html.ActionLink("Return", "lstProoutofstock", null, htmlAttributes: new { @class = "btn btn-sm btn-secondary font-weight-bold" })
+            </div>
+        }
+    </div>
+</div>

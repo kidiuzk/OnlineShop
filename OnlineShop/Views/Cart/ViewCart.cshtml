@@ -1,0 +1,149 @@
+﻿@using OnlineShop.Models.ViewModel
+@model List<ItemCart>
+@{
+    ViewBag.Title = "ViewCart";
+    Layout = "~/Views/Layout/RegisterLayout.cshtml";
+}
+
+
+@if (Model == null && Model.Count == 0) //nếu list giỏ hàng rỗng thì xuất thông báo
+{
+    <h1 style="color:crimson">Cart is empty</h1>
+}
+else
+{
+    <div class="container" style="text-align:left;">
+        @using (Html.BeginForm("Order", "Cart", FormMethod.Post, new { @id = "myform" }))
+        {
+            if (Session["UserName"] == null)
+            {
+                <div class=" register">
+                    <h1>Customer information</h1>
+                    @Html.Hidden("IDUser", 1)
+                    <div class="col-md-6 register-top-grid">
+
+                        <div>
+                            <span>Customer name</span>
+                            @Html.TextBox("CustomerName")
+                        </div>
+                        <div>
+                            <span>Address</span>
+                            @Html.TextBox("Address")
+                        </div>
+
+                    </div>
+                    <div class="col-md-6 register-bottom-grid">
+                        <div>
+                            <span>Email</span>
+                            @Html.TextBox("Email")
+                        </div>
+                        <div>
+                            <span>Phone number</span>
+                            @Html.TextBox("Phone")
+                        </div>
+
+                    </div>
+                    <div class="clearfix"> </div>
+
+                </div>
+            }
+
+            <div class="check">
+                <h1 style="color:#000000">Cart (@ViewBag.TotalAmount)</h1>
+                <div class="col-md-9 cart-items">
+                    @foreach (var item in Model)
+                    {
+                        <div class="cart-header">
+
+                            <a href="@Url.Action("EditCart",new {@ProductID = item.ProductID })" class="editIcon"><i class="fas fa-pen-square fa-lg" style="color: rgba(239, 95, 33);"></i></a>
+                            <a href="@Url.Action("DeleteCart",new {@ProductID = item.ProductID })" class="delIcon"><i class="fas fa-trash fa-lg" style="color: rgba(239, 95, 33);"></i> </a>
+                            <div class="cart-sec simpleCart_shelfItem">
+                                <div class="cart-item cyc">
+                                    <img src="@Url.Content("~/Content/Img/" + item.Img)" class="img-responsive" alt="" />
+                                </div>
+                                <div class="cart-item-info">
+                                    <h3><a href="#">@item.ProductName</a></h3>
+                                    <ul class="qty">
+                                        <li><p>Amount: @item.Amount</p></li>
+                                        <li><p>Price: @item.Price.ToString("#,##") VNĐ</p></li>
+                                    </ul>
+
+                                    <div class="delivery">
+                                        <p style="font-weight:bold;">Into money: @item.IntoMoney.ToString("#,##") VNĐ</p>
+                                        <span>Delivery in 2-3 working days.</span>
+                                        <div class="clearfix"></div>
+
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div class="col-md-3 cart-total">
+                    <a class="continue" href="@Url.Action("Index", "Home")">Continue shopping</a>
+                    <div class="price-details">
+                        <h3>Detailed unit price</h3>
+                        <span>Total</span>
+                        <span class="total1">@ViewBag.TotalPrice.ToString("#,##")</span>
+                        <span>Discount</span>
+                        <span class="total1">---</span>
+                        <div class="clearfix"></div>
+                    </div>
+
+                    <ul class="total_price">
+                        <li class="last_price"> <h4>Total</h4></li>
+                        <li class="last_price"><span>@ViewBag.TotalPrice.ToString("#,##") VNĐ</span></li>
+                        <div class="clearfix"> </div>
+                    </ul>
+
+                    <div class="clearfix"></div>
+                    <a class="order" href="#" onclick='document.forms["myform"].submit(); return false;'>Order</a>
+                </div>
+
+                <div class="clearfix"> </div>
+            </div>
+        }
+
+    </div>
+}
+
+<style>
+    .register {
+        padding: 2em 0;
+        border-bottom: 1px solid #C4C3C3;
+    }
+
+    .register-bottom-grid input[type="text"] {
+        width: 100%;
+        padding: 1em;
+        margin: 1em 0;
+        background: none;
+        outline: none;
+        border: 1px solid #A09F9F;
+        -webkit-appearance: none;
+    }
+
+    .editIcon {
+        cursor: pointer;
+        position: absolute;
+        right: 2em;
+        top: 0px;
+        -webkit-transition: color 0.2s ease-in-out;
+        -moz-transition: color 0.2s ease-in-out;
+        -o-transition: color 0.2s ease-in-out;
+        transition: color 0.2s ease-in-out;
+    }
+
+    .delIcon {
+        cursor: pointer;
+        position: absolute;
+        right: 0px;
+        top: 0px;
+        -webkit-transition: color 0.2s ease-in-out;
+        -moz-transition: color 0.2s ease-in-out;
+        -o-transition: color 0.2s ease-in-out;
+        transition: color 0.2s ease-in-out;
+    }
+</style>

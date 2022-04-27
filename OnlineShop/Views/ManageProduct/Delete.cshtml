@@ -1,0 +1,102 @@
+﻿@model OnlineShop.Models.Product
+
+@{
+    ViewBag.Title = "Product Management";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+}
+
+<h4>@Html.ActionLink("Product", "Index") > Delete</h4>
+<div class="card shadow">
+    <div class="card-body">
+        <h4 class="card-title">Product information</h4>
+        <hr />
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.ProducerID)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.ProducerID)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.ProductName)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.ProductName)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Price)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Price)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.UpdateDay)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.UpdateDay)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Configuration)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Configuration)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Img)</label>
+            <img src="@Url.Content("~/Content/Img/" + Model.Img)" class="img-thumbnail" alt="Cinque Terre" width="200" height="200">
+
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Views)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Views)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.votes)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.votes)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Comments)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Comments)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.ManufactureID)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.ManufactureID)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.ProducerID)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.ProducerID)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.CategoryID)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.CategoryID)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Status)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Status)</div>
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Img1)</label>
+            <img src="@Url.Content("~/Content/Img/" + Model.Img1)" class="img-thumbnail" alt="Cinque Terre" width="200" height="200">
+
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Img2)</label>
+            <img src="@Url.Content("~/Content/Img/" + Model.Img2)" class="img-thumbnail" alt="Cinque Terre" width="200" height="200">
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Img3)</label>
+            <img src="@Url.Content("~/Content/Img/" + Model.Img3)" class="img-thumbnail" alt="Cinque Terre" width="200" height="200">
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Img4)</label>
+            <img src="@Url.Content("~/Content/Img/" + Model.Img4)" class="img-thumbnail" alt="Cinque Terre" width="200" height="200">
+        </div>
+        <div class="row ">
+            <label class="col-sm-2 col-form-label font-weight-bold">@Html.DisplayNameFor(model => model.Description)</label>
+            <div class="col-sm-6 col-form-label">@Html.DisplayFor(model => model.Description, "", new { @class = "overflow-auto" })</div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-4">
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-sm btn-primary font-weight-bold w-25" />
+                    @Html.ActionLink("Return", "Index", null, htmlAttributes: new { @class = "btn btn-sm btn-secondary font-weight-bold w-25" })
+                }
+            </div>
+        </div>
+
+
+    </div>
+</div>

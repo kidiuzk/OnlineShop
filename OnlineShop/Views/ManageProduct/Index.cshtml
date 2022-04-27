@@ -1,0 +1,42 @@
+﻿@using OnlineShop.Models;
+@model IEnumerable<Product>
+@{
+    ViewBag.Title = "Product Management";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+   WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10); //khởi tạo control webgird
+
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        <p>
+            @Html.ActionLink("Create", "Create", null, htmlAttributes: new { @class = "btn btn-sm btn-warning font-weight-bold " })
+        </p>
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                headerStyle: "",
+                footerStyle: "text-center",
+                numericLinksCount: 10,
+                mode: WebGridPagerModes.All, firstText: "First Page", lastText: "Last Page",
+                columns: grid.Columns(
+                    grid.Column("ProductID", "ProductID"),
+                    grid.Column("ProductName", "ProductName"),
+                    grid.Column("Img", "Image", format: p => Html.Raw("<img width=\"150\" height=\"150\" src=\"../Content/Img/" + p.Img + "\">")),
+                    grid.Column("Quantity", "Inventory number"),
+                    grid.Column("Price", "Price", format: p => p.Price.ToString("#,##")),
+                    grid.Column("Category.CategoryName", "Category"),
+                    grid.Column("Producer.ProducerName", "Producer"),
+                    grid.Column(format: p => Html.ActionLink("Edit", "Edit", new { id = p.ProductID })),
+                    grid.Column(format: p => Html.ActionLink("Delete", "Delete", new { id = p.ProductID })),
+                    grid.Column(format: p => Html.ActionLink("Upload Image", "UploadImg", new { id = p.ProductID }))
+                    )
+                )
+            </div>
+        }
+    </div>
+</div>

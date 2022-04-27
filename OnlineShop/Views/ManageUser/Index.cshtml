@@ -1,0 +1,40 @@
+﻿@using OnlineShop.Models
+@model IEnumerable<User>
+@{
+    ViewBag.Title = "ManageUser";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10);
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        <p>
+            @Html.ActionLink("Add new", "Create", null, htmlAttributes: new { @class = "btn btn-sm btn-warning font-weight-bold " })
+        </p>
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                headerStyle: "",
+                footerStyle: "text-center",
+                numericLinksCount: 10,
+                mode: WebGridPagerModes.All, firstText: "First page", lastText: "Last page",
+                columns: grid.Columns(
+                    grid.Column("IDUser", "User ID"),
+                    grid.Column("UserName", "User Name"),
+                    grid.Column("FullName", "Full Name"),
+                    grid.Column("Address", "Address"),
+                    grid.Column("Email", "Email"),
+                    grid.Column("PhoneNumber", "PhoneNumber"),
+                    grid.Column("UserType.UsertypeName", "User Type"),
+                    grid.Column(format: p => Html.ActionLink("Edit", "Edit", new { id = p.IDUser })),
+                    grid.Column(format: p => Html.ActionLink("Delete", "Delete", new { id = p.IDUser }))
+                    )
+                )
+            </div>
+        }
+    </div>
+</div>

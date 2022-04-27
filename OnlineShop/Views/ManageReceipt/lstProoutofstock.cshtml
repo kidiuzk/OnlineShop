@@ -1,0 +1,31 @@
+﻿@model IEnumerable<OnlineShop.Models.Product>
+@{
+    ViewBag.Title = "Products are almost out of stock";
+    Layout = "~/Views/Layout/AdminLayout.cshtml";
+
+    WebGrid grid = new WebGrid(source: Model, rowsPerPage: 10); //khởi tạo control webgird
+}
+
+<h2>@ViewBag.Title</h2>
+<div class="card">
+    <div class="card-body">
+        @if (grid != null)
+        {
+            <div id="list" class="table-responsive">
+                @grid.GetHtml(
+                tableStyle: "table table-bordered table-hover",
+                headerStyle: "",
+                footerStyle: "text-center",
+                numericLinksCount: 10,
+                mode: WebGridPagerModes.All, firstText: "First page", lastText: "Last page",
+                columns: grid.Columns(
+                    grid.Column("ProductID", "ProductID"),
+                    grid.Column("ProductName", "ProductName"),
+                    grid.Column("Img", "Image", format: p => Html.Raw("<img width=\"100\" height=\"100\" src=\"../Content/Img/" + p.Img + "\">")),
+                    grid.Column(format: p => Html.ActionLink("Import goods", "Importorder", new { id = p.ProductID }))
+                    )
+                )
+            </div>
+        }
+    </div>
+</div>
